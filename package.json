@@ -1,0 +1,25 @@
+{
+  "name": "suggestion-box",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "start": "npm --prefix api start",
+    "preinstall": "npm --prefix frontend i && npm --prefix api i",
+    "build": "npm --prefix frontend run build"
+  },
+  "devDependencies": {
+    "husky": "4.2.5",
+    "lint-staged": "10.2.9",
+    "prettier": "2.0.5"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,css,scss}": [
+      "prettier --write"
+    ]
+  }
+}
