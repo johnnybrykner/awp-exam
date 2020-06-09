@@ -1,0 +1,25 @@
+.wrapper {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+
+  .content__container {
+    margin-top: 2rem;
+    display: grid;
+    grid-template-rows: 1fr;
+    gap: 2rem;
+    justify-content: center;
+  }
+
+  .signature__button {
+    background-color: blue;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    text-align: center;
+  }
+
+  .signatures__heading {
+    font-weight: bold;
+  }
+}

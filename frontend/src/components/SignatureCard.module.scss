@@ -1,0 +1,15 @@
+@import "../assets/global.scss";
+
+.signature__container {
+  display: flex;
+  justify-content: space-between;
+
+  section {
+    display: flex;
+    align-items: center;
+
+    span:nth-child(2) {
+      margin-left: 0.25rem;
+    }
+  }
+}

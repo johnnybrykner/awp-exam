@@ -1,0 +1,69 @@
+@import "../assets/global.scss";
+
+.suggestion__container {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+
+  .suggestion__header {
+    display: flex;
+    flex-flow: column nowrap;
+    width: 100%;
+
+    .suggestion__visibility {
+      opacity: 0.5;
+      display: flex;
+      align-items: center;
+      margin-top: -1.5rem;
+      position: relative;
+      bottom: 1rem;
+      left: 2.5rem;
+      align-self: flex-end;
+      transition: opacity 0.3s;
+
+      &:hover {
+        opacity: 1;
+      }
+
+      span {
+        font-size: 0.75rem;
+      }
+
+      input[type="checkbox"] {
+        margin-left: 0.5rem;
+      }
+    }
+
+    .suggestion__icons {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+
+      section {
+        display: flex;
+        align-items: center;
+
+        span:nth-child(2) {
+          margin-left: 0.25rem;
+          font-size: 0.75rem;
+          font-weight: bold;
+        }
+      }
+    }
+  }
+
+  .suggestion_signatures {
+    font-size: 0.75rem;
+    font-weight: bold;
+  }
+
+  .suggestion__title {
+    align-self: baseline;
+  }
+
+  .suggestion__description {
+    align-self: baseline;
+    line-height: 1.25rem;
+    margin: 1rem 0;
+  }
+}

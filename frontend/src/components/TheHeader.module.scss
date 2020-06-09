@@ -1,0 +1,21 @@
+@import "../assets/global.scss";
+
+.header__container {
+  align-self: baseline;
+  width: 100%;
+
+  .account__toggle {
+    display: flex;
+    align-items: center;
+
+    span:first-of-type {
+      font-size: 3rem;
+      cursor: pointer;
+    }
+
+    .account__status {
+      font-weight: bold;
+      margin-left: 0.5rem;
+    }
+  }
+}

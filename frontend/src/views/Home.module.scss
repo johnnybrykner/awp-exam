@@ -1,0 +1,8 @@
+@import "../assets/global.scss";
+
+.wrapper {
+  display: grid;
+  grid-template-rows: 1fr;
+  gap: 2rem;
+  justify-content: center;
+}
