@@ -2,14 +2,31 @@
 
 .signature__container {
   display: flex;
-  justify-content: space-between;
+  flex-flow: column nowrap;
 
-  section {
+  .signature__header {
     display: flex;
-    align-items: center;
+    justify-content: space-between;
 
-    span:nth-child(2) {
-      margin-left: 0.25rem;
+    section {
+      display: flex;
+      align-items: center;
+      font-size: 0.75rem;
+
+      &:last-of-type {
+        justify-content: flex-end;
+      }
+
+      span:nth-child(2) {
+        margin-left: 0.25rem;
+      }
     }
+  }
+
+  .signature__username {
+    margin-top: 1rem;
+    font-family: "handwriting";
+    text-align: center;
+    font-size: 3rem;
   }
 }

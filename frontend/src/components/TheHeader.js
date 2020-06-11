@@ -34,8 +34,7 @@ function TheHeader(props) {
     const sessionData = await rawData.json();
     if (sessionData && sessionData.username && sessionData.fullName) {
       props.VALID_SESSION({
-        username: sessionData.username,
-        fullName: sessionData.fullName,
+        ...sessionData,
         token: lastSessionToken,
       });
     }

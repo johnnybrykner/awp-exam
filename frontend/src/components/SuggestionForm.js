@@ -28,6 +28,7 @@ function SuggestionForm(props) {
       {
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${props.token}`,
         },
         method: "POST",
         body: JSON.stringify({

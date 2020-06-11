@@ -89,9 +89,7 @@ function AccountForm(props) {
     if (response.error) setError(response.error);
     if (response && response.username && response.fullName && response.token) {
       props.VALID_SESSION({
-        username: response.username,
-        fullName: response.fullName,
-        token: response.token,
+        ...response,
       });
       setError("");
       props.closeDropdown();

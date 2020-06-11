@@ -1,7 +1,10 @@
 import React from "react";
 import styles from "./SuggestionCard.module.scss";
+import { connect } from "react-redux";
 
-export default function SuggestionCard(props) {
+const mapStateToProps = (state) => state.userStore;
+
+function SuggestionCard(props) {
   function toggleVisibility(event) {
     event.preventDefault();
   }
@@ -9,17 +12,19 @@ export default function SuggestionCard(props) {
   return (
     <div className={styles.suggestion__container + " fancy"}>
       <div className={styles.suggestion__header}>
-        <div
-          className={styles.suggestion__visibility}
-          onClick={(event) => toggleVisibility(event)}
-        >
-          <span>Suggestion visible:</span>
-          <input
-            type="checkbox"
-            name="visibility"
-            checked={props.suggestionData.visibility}
-          />
-        </div>
+        {props.loggedIn && props.adminAccount && (
+          <div
+            className={styles.suggestion__visibility}
+            onClick={(event) => toggleVisibility(event)}
+          >
+            <span>Suggestion visible:</span>
+            <input
+              type="checkbox"
+              name="visibility"
+              checked={props.suggestionData.visibility}
+            />
+          </div>
+        )}
         <div className={styles.suggestion__icons}>
           <section>
             <span className="material-icons">account_circle</span>
@@ -48,3 +53,5 @@ export default function SuggestionCard(props) {
     </div>
   );
 }
+
+export default connect(mapStateToProps)(SuggestionCard);

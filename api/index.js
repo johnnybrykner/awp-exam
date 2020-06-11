@@ -38,46 +38,62 @@ app.get("/api/suggestions", async (req, res) =>
   res.json(await models.Suggestion.find({}))
 );
 
-app.post("/api/suggestions", async (req, res) => {
-  try {
-    const newSuggestion = new models.Suggestion({
-      ...req.body,
-    });
-    await newSuggestion.save((error, suggestion) => {
-      res.json(suggestion);
-    });
-  } catch (error) {
-    res.status(400).send({ error: "Suggestion could not be created" });
+app.post(
+  "/api/suggestions",
+  validate({
+    secret: process.env.JWT_SECRET,
+  }),
+  async function (req, res) {
+    try {
+      const newSuggestion = new models.Suggestion({
+        ...req.body,
+      });
+      await newSuggestion.save((error, suggestion) => {
+        res.json(suggestion);
+      });
+    } catch (error) {
+      res.status(400).send({ error: "Suggestion could not be created" });
+    }
   }
-});
+);
 
 app.get("/api/suggestion/:id", async (req, res) => {
   res.json(await models.Suggestion.findOne({ _id: req.params.id }));
 });
 
-app.put("/api/suggestion/:id", async (req, res) => {
-  try {
-    let toBeUpdated = await models.Suggestion.findByIdAndUpdate(req.params.id, {
-      ...req.body,
-    });
-    await toBeUpdated.save();
-  } catch (error) {
-    res.status(400).send({ error: "Suggestion update failed" });
+app.put(
+  "/api/suggestion/:id",
+  validate({
+    secret: process.env.JWT_SECRET,
+  }),
+  async function (req, res) {
+    try {
+      let toBeUpdated = await models.Suggestion.findByIdAndUpdate(
+        req.params.id,
+        {
+          ...req.body,
+        }
+      );
+      await toBeUpdated.save();
+    } catch (error) {
+      res.status(400).send({ error: "Suggestion update failed" });
+    }
+    res.json(await models.Suggestion.findOne({ _id: req.params.id }));
   }
-  res.json(await models.Suggestion.findOne({ _id: req.params.id }));
-});
+);
 
 app.post("/api/register", async (req, res) => {
   const { username, password, fullName } = req.body;
   const dbMatch = await models.User.findOne({ username });
   if (dbMatch) {
-    res.status(401).send({ error: "User already exists" });
+    res.status(400).send({ error: "User already exists" });
   } else {
     bcrypt.genSalt(10, function (error, salt) {
       bcrypt.hash(password, salt, async function (error, hash) {
         const newUser = new models.User({
           ...req.body,
           password: hash,
+          adminAccount: false,
         });
         await newUser.save();
       });
@@ -98,7 +114,7 @@ app.get(
     secret: process.env.JWT_SECRET,
   }),
   function (req, res) {
-    if (req.user.username) {
+    if (req.user.username && req.user.fullName) {
       res.json(req.user);
     } else {
       res
@@ -110,7 +126,7 @@ app.get(
 
 app.post("/api/login", async (req, res) => {
   const { username, password } = req.body;
-  const dbMatch = await models.User.findOne({ username: username });
+  const dbMatch = await models.User.findOne({ username });
   if (dbMatch) {
     bcrypt.compare(password, dbMatch.password, function (error, valid) {
       if (valid)
@@ -118,7 +134,12 @@ app.post("/api/login", async (req, res) => {
           message: `Welcome back, ${username}!`,
           username,
           fullName: dbMatch.fullName,
-          token: signToken({ username, fullName: dbMatch.fullName }),
+          token: signToken({
+            username,
+            fullName: dbMatch.fullName,
+            adminAccount: dbMatch.adminAccount,
+          }),
+          adminAccount: dbMatch.adminAccount,
         });
       else res.status(401).send({ error: "Password mismatch" });
     });

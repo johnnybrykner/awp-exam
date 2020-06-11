@@ -49,6 +49,7 @@ function Suggestion(props) {
       {
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${props.token}`,
         },
         method: "PUT",
         body: JSON.stringify(updated),

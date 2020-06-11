@@ -131,3 +131,10 @@ a {
   text-decoration: none;
   color: inherit;
 }
+
+@font-face {
+  font-family: "handwriting";
+  src: url("./handwriting.ttf") format("truetype");
+  font-weight: 400;
+  font-display: swap;
+}

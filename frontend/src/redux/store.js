@@ -13,6 +13,7 @@ const initialAccountState = {
   fullName: null,
   token: null,
   accountFormType: "login",
+  adminAccount: false,
 };
 
 export const LOG_IN = createAsyncThunk(
@@ -41,6 +42,7 @@ const accountSlice = createSlice({
       state.username = null;
       state.fullName = null;
       state.token = null;
+      state.adminAccount = false;
       state.accountFormType = "login";
     },
     SET_ACCOUNT_FORM_TYPE: (state, action) => {
@@ -51,6 +53,7 @@ const accountSlice = createSlice({
       state.username = action.payload.username;
       state.fullName = action.payload.fullName;
       state.token = action.payload.token;
+      if (action.payload.adminAccount) state.adminAccount = true;
       state.accountFormType = "logout";
     },
   },
@@ -60,6 +63,7 @@ const accountSlice = createSlice({
       state.username = action.payload.username;
       state.fullName = action.payload.fullName;
       state.token = action.payload.token;
+      if (action.payload.adminAccount) state.adminAccount = true;
     },
   },
 });

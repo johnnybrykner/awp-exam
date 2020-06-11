@@ -1,11 +1,11 @@
 .wrapper {
   display: grid;
   justify-content: center;
+  grid-template-columns: 1fr;
 
   .content__container {
     margin-top: 2rem;
     display: grid;
-    grid-template-rows: 1fr;
     gap: 2rem;
     justify-content: center;
   }
