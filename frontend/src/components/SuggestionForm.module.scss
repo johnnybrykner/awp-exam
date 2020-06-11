@@ -1,0 +1,44 @@
+.suggestion__wrapper {
+  width: calc(100% - 4rem);
+  height: calc(100vh - 4rem);
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  flex-flow: column nowrap;
+  padding: 2rem;
+
+  .form__close {
+    align-self: flex-end;
+    cursor: pointer;
+    font-size: 3rem;
+    color: white;
+    transition: 0.3s color;
+
+    &:hover {
+      color: blue;
+    }
+  }
+
+  .form__container {
+    display: flex;
+    flex-flow: column nowrap;
+
+    .form__heading {
+      color: white;
+      font-weight: bold;
+    }
+
+    textarea,
+    input:not([type="submit"]) {
+      resize: none;
+      padding: 0.75rem;
+      border-radius: 7px;
+      border: none;
+      font-family: inherit;
+      font-size: 0.75rem;
+      margin-top: 1rem;
+    }
+  }
+}

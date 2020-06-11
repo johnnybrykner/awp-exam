@@ -45,7 +45,7 @@ app.post("/api/suggestions", async (req, res) => {
     });
     await newSuggestion.save();
   } catch (error) {
-    res.status(400).send({ error: "Suggestion" });
+    res.status(400).send({ error: "Suggestion could not be created" });
   }
   res.json(await models.Suggestion.find({}));
 });
@@ -67,7 +67,7 @@ app.put("/api/suggestion/:id", async (req, res) => {
 });
 
 app.post("/api/register", async (req, res) => {
-  const { username, password } = req.body;
+  const { username, password, fullName } = req.body;
   const dbMatch = await models.User.findOne({ username });
   if (dbMatch) {
     res.status(401).send({ error: "User already exists" });
@@ -81,9 +81,11 @@ app.post("/api/register", async (req, res) => {
         await newUser.save();
       });
     });
-    const token = signToken({ username });
+    const token = signToken({ username, fullName });
     res.json({
       message: `Hello ${username}, welcome to the suggestion box!`,
+      username,
+      fullName,
       token,
     });
   }

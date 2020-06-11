@@ -3,13 +3,13 @@ import styles from "./TheHeader.module.scss";
 import { CSSTransition } from "react-transition-group";
 import AccountForm from "../components/AccountForm";
 import { connect } from "react-redux";
-import { LOG_IN, LOG_OUT } from "../redux/store";
+import { LOG_OUT, VALID_SESSION } from "../redux/store";
 
 const mapStateToProps = (state) => state.userStore;
 
 const mapDispatchToProps = {
-  LOG_IN,
   LOG_OUT,
+  VALID_SESSION,
 };
 
 function TheHeader(props) {
@@ -21,7 +21,8 @@ function TheHeader(props) {
 
   async function validateSession() {
     const lastSessionToken = window.localStorage.getItem("sessionToken");
-    const rawData = await fetch("http://localhost:8080/api/session", {
+    if (!lastSessionToken || !lastSessionToken.length) return;
+    const rawData = await fetch(`${process.env.REACT_APP_API_URL}/session`, {
       headers: {
         Authorization: `Bearer ${lastSessionToken}`,
       },
@@ -31,27 +32,26 @@ function TheHeader(props) {
       return;
     }
     const sessionData = await rawData.json();
-    if (sessionData && sessionData.username && sessionData.fullName)
-      props.LOG_IN({
+    if (sessionData && sessionData.username && sessionData.fullName) {
+      props.VALID_SESSION({
         username: sessionData.username,
         fullName: sessionData.fullName,
         token: lastSessionToken,
       });
+    }
   }
 
   return (
     <div className={styles.header__container}>
-      <div className={styles.account__toggle}>
-        <span
-          className="material-icons"
-          onClick={() => toggleAccountDropdown(!accountDropdownOpen)}
-        >
-          account_box
-        </span>
+      <div
+        className={styles.account__toggle}
+        onClick={() => toggleAccountDropdown(!accountDropdownOpen)}
+      >
+        <span className="material-icons">account_box</span>
         <span className={styles.account__status}>
           {props.loggedIn
             ? `logged in as ${props.username}`
-            : "log in to participate"}
+            : "currently not logged in"}
         </span>
       </div>
       <CSSTransition

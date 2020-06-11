@@ -17,7 +17,7 @@ function Suggestion(props) {
 
   async function getSuggestionById() {
     const rawData = await fetch(
-      `http://localhost:8080/api/suggestion/${props.suggestionId}`
+      `${process.env.REACT_APP_API_URL}/suggestion/${props.suggestionId}`
     );
     const suggestionData = await rawData.json();
     setSuggestion(suggestionData);
@@ -35,12 +35,12 @@ function Suggestion(props) {
       const newSignature = {
         username: props.username,
         fullName: props.fullName,
-        date: moment().calendar(),
+        date: moment().format("MMMM Do YYYY, h:mm"),
       };
       updated.signatures.push(newSignature);
     }
     const rawData = await fetch(
-      `http://localhost:8080/api/suggestion/${props.suggestionId}`,
+      `${process.env.REACT_APP_API_URL}/suggestion/${props.suggestionId}`,
       {
         headers: {
           "Content-Type": "application/json",

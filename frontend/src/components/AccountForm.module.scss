@@ -1,32 +1,42 @@
 @import "../assets/global.scss";
 
-.form__container {
-  display: flex;
-  flex-flow: column nowrap;
+.form__wrapper {
   margin-top: 1rem;
 
-  h2 {
-    font-weight: bold;
-    font-size: 0.75rem;
-    margin-bottom: 0.5rem;
-  }
+  .form__container {
+    display: flex;
+    flex-flow: column nowrap;
 
-  input {
-    padding: 1rem 0;
-
-    &:nth-of-type(2) {
-      margin: 1rem 0 0.5rem 0;
+    h2 {
+      font-weight: bold;
+      font-size: 0.75rem;
+      margin-bottom: 0.5rem;
     }
-  }
 
-  .form_error {
-    margin-bottom: 0.5rem;
-  }
+    input {
+      padding: 0.75rem;
 
-  input[type="submit"] {
-    background-color: blue;
-    border: none;
-    color: white;
-    padding: 1rem;
+      &:nth-of-type(2) {
+        margin: 0.5rem 0;
+      }
+
+      &:last-of-type {
+        margin-bottom: 0;
+      }
+    }
+
+    .account__cta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+
+      .account__action {
+        color: blue;
+        font-weight: bold;
+        margin-left: 0.25rem;
+        cursor: pointer;
+      }
+    }
   }
 }

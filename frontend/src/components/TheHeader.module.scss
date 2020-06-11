@@ -7,10 +7,10 @@
   .account__toggle {
     display: flex;
     align-items: center;
+    cursor: pointer;
 
     span:first-of-type {
       font-size: 3rem;
-      cursor: pointer;
     }
 
     .account__status {
