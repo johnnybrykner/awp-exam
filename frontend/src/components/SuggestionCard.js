@@ -2,12 +2,23 @@ import React from "react";
 import styles from "./SuggestionCard.module.scss";
 
 export default function SuggestionCard(props) {
+  function toggleVisibility(event) {
+    event.preventDefault();
+  }
+
   return (
     <div className={styles.suggestion__container + " fancy"}>
       <div className={styles.suggestion__header}>
-        <div className={styles.suggestion__visibility}>
+        <div
+          className={styles.suggestion__visibility}
+          onClick={(event) => toggleVisibility(event)}
+        >
           <span>Suggestion visible:</span>
-          <input type="checkbox" name="visibility" />
+          <input
+            type="checkbox"
+            name="visibility"
+            checked={props.suggestionData.visibility}
+          />
         </div>
         <div className={styles.suggestion__icons}>
           <section>

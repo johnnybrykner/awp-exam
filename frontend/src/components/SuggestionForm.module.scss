@@ -40,5 +40,10 @@
       font-size: 0.75rem;
       margin-top: 1rem;
     }
+
+    @media (min-width: 575px) {
+      width: 511px;
+      margin: 0 auto;
+    }
   }
 }

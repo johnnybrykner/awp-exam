@@ -14,12 +14,13 @@
       opacity: 0.5;
       display: flex;
       align-items: center;
-      margin-top: -1.5rem;
+      margin-top: 0rem;
       position: relative;
       bottom: 1rem;
-      left: 2.5rem;
+      left: 1rem;
       align-self: flex-end;
       transition: opacity 0.3s;
+      padding: 0.5rem;
 
       &:hover {
         opacity: 1;
@@ -32,6 +33,11 @@
       input[type="checkbox"] {
         margin-left: 0.5rem;
       }
+
+      @media (min-width: 575px) {
+        margin-top: -1.5rem;
+        left: 2.5rem;
+      }
     }
 
     .suggestion__icons {
@@ -42,6 +48,11 @@
       section {
         display: flex;
         align-items: center;
+        flex: 1 1 50%;
+
+        &:last-of-type {
+          justify-content: flex-end;
+        }
 
         span:nth-child(2) {
           margin-left: 0.25rem;

@@ -2,11 +2,17 @@
 
 .wrapper {
   display: grid;
-  grid-template-rows: 1fr;
   gap: 2rem;
   justify-content: center;
 
+  .empty__header {
+    font-weight: bold;
+    color: blue;
+  }
+
   .suggestion__add {
+    position: fixed;
+    bottom: 4rem;
     font-size: 4rem;
     justify-self: end;
     transition: transform 0.3s;

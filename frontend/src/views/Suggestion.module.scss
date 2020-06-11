@@ -1,7 +1,6 @@
 .wrapper {
-  display: flex;
-  flex-flow: column nowrap;
-  align-items: center;
+  display: grid;
+  justify-content: center;
 
   .content__container {
     margin-top: 2rem;
@@ -13,6 +12,7 @@
 
   .signature__button {
     background-color: blue;
+    padding: 1.5rem;
     color: white;
     font-weight: bold;
     cursor: pointer;

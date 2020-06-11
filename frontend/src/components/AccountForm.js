@@ -54,7 +54,7 @@ function AccountForm(props) {
       ? login()
       : props.accountFormType === "register"
       ? register()
-      : props.LOG_OUT();
+      : logout();
   }
 
   async function login() {
@@ -65,6 +65,12 @@ function AccountForm(props) {
       props.closeDropdown();
       window.localStorage.setItem("sessionToken", result.payload.token);
     }
+  }
+
+  function logout() {
+    props.closeDropdown();
+    props.LOG_OUT();
+    window.localStorage.removeItem("sessionToken");
   }
 
   async function register() {

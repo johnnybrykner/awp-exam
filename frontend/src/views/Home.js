@@ -8,6 +8,7 @@ import { Link } from "@reach/router";
 
 export default function Home() {
   const [suggestions, setSuggestions] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [suggestionDrawer, toggleSuggestionDrawer] = useState(false);
 
   useEffect(() => {
@@ -17,6 +18,7 @@ export default function Home() {
   async function fetchData() {
     const rawData = await fetch(`${process.env.REACT_APP_API_URL}/suggestions`);
     const suggestionsData = await rawData.json();
+    setLoading(false);
     setSuggestions(suggestionsData);
   }
 
@@ -29,8 +31,12 @@ export default function Home() {
             <SuggestionCard suggestionData={suggestion} />
           </Link>
         ))
-      ) : (
+      ) : loading ? (
         <img alt="Loading..." src={require("../assets/spinner.gif")} />
+      ) : (
+        <span className={styles.empty__header}>
+          There are no suggestions yet, you can add one with the button below
+        </span>
       )}
       <span
         className={styles.suggestion__add + " material-icons"}
@@ -46,6 +52,7 @@ export default function Home() {
       >
         <SuggestionForm
           closeSuggestionDrawer={() => toggleSuggestionDrawer(false)}
+          requestDataRefresh={() => fetchData()}
         />
       </CSSTransition>
     </div>

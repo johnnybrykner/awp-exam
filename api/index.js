@@ -43,11 +43,12 @@ app.post("/api/suggestions", async (req, res) => {
     const newSuggestion = new models.Suggestion({
       ...req.body,
     });
-    await newSuggestion.save();
+    await newSuggestion.save((error, suggestion) => {
+      res.json(suggestion);
+    });
   } catch (error) {
     res.status(400).send({ error: "Suggestion could not be created" });
   }
-  res.json(await models.Suggestion.find({}));
 });
 
 app.get("/api/suggestion/:id", async (req, res) => {
@@ -72,8 +73,8 @@ app.post("/api/register", async (req, res) => {
   if (dbMatch) {
     res.status(401).send({ error: "User already exists" });
   } else {
-    bcrypt.genSalt(10, function (err, salt) {
-      bcrypt.hash(password, salt, async function (err, hash) {
+    bcrypt.genSalt(10, function (error, salt) {
+      bcrypt.hash(password, salt, async function (error, hash) {
         const newUser = new models.User({
           ...req.body,
           password: hash,
@@ -111,7 +112,7 @@ app.post("/api/login", async (req, res) => {
   const { username, password } = req.body;
   const dbMatch = await models.User.findOne({ username: username });
   if (dbMatch) {
-    bcrypt.compare(password, dbMatch.password, function (err, valid) {
+    bcrypt.compare(password, dbMatch.password, function (error, valid) {
       if (valid)
         res.json({
           message: `Welcome back, ${username}!`,

@@ -4,6 +4,7 @@ import SuggestionCard from "../components/SuggestionCard";
 import SignatureCard from "../components/SignatureCard";
 import styles from "./Suggestion.module.scss";
 import moment from "moment";
+import { navigate } from "@reach/router";
 import { connect } from "react-redux";
 
 const mapStateToProps = (state) => state.userStore;
@@ -20,6 +21,10 @@ function Suggestion(props) {
       `${process.env.REACT_APP_API_URL}/suggestion/${props.suggestionId}`
     );
     const suggestionData = await rawData.json();
+    if (!suggestionData) {
+      navigate("/");
+      return;
+    }
     setSuggestion(suggestionData);
   }
 
@@ -35,7 +40,7 @@ function Suggestion(props) {
       const newSignature = {
         username: props.username,
         fullName: props.fullName,
-        date: moment().format("MMMM Do YYYY, h:mm"),
+        date: moment().format("DD MMM YYYY, HH:mm"),
       };
       updated.signatures.push(newSignature);
     }

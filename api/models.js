@@ -23,7 +23,7 @@ const suggestionSchema = new mongoose.Schema(
     date: String,
     username: String,
     fullName: String,
-    hidden: Boolean,
+    visibility: Boolean,
     signatures: [signatureSchema],
   },
   { collection: "suggestions" }

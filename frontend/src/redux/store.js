@@ -42,7 +42,6 @@ const accountSlice = createSlice({
       state.fullName = null;
       state.token = null;
       state.accountFormType = "login";
-      window.localStorage.removeItem("sessionToken");
     },
     SET_ACCOUNT_FORM_TYPE: (state, action) => {
       state.accountFormType = action.payload;

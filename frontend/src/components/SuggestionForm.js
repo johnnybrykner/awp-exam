@@ -18,10 +18,7 @@ function SuggestionForm(props) {
   }
 
   async function submitSuggestion() {
-    if (!props.loggedIn) {
-      props.closeSuggestionDrawer();
-      return;
-    }
+    if (!props.loggedIn) return;
     if (!title.trim() || !body.trim()) {
       setError("Please fill in both the title and the body");
       return;
@@ -36,16 +33,19 @@ function SuggestionForm(props) {
         body: JSON.stringify({
           title,
           description: body,
-          date: moment().format("MMMM Do YYYY, h:mm"),
+          date: moment().format("DD MMM YYYY, HH:mm"),
           username: props.username,
           fullName: props.fullName,
-          hidden: false,
+          visibility: true,
           sigatures: [],
         }),
       }
     );
     const response = await rawData.json();
-    console.log(response);
+    if (response._id) {
+      props.requestDataRefresh();
+      props.closeSuggestionDrawer();
+    }
   }
 
   return (
@@ -71,9 +71,6 @@ function SuggestionForm(props) {
           onChange={inputChange}
           name="body"
           placeholder="Your suggestion"
-          onKeyPress={({ charCode }) => {
-            if (charCode === 13) submitSuggestion();
-          }}
         />
         <span className={styles.form_error + " error"}>{error}</span>
         <input
