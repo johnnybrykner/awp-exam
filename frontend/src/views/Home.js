@@ -5,18 +5,27 @@ import { CSSTransition } from "react-transition-group";
 import styles from "./Home.module.scss";
 import TheHeader from "../components/TheHeader";
 import { Link } from "@reach/router";
+import { connect } from "react-redux";
 
-export default function Home() {
+const mapStateToProps = (state) => state.userStore;
+
+function Home(props) {
   const [suggestions, setSuggestions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [suggestionDrawer, toggleSuggestionDrawer] = useState(false);
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [props.loggedIn]);
 
   async function fetchData() {
-    const rawData = await fetch(`${process.env.REACT_APP_API_URL}/suggestions`);
+    const rawData = props.loggedIn
+      ? await fetch(`${process.env.REACT_APP_API_URL}/suggestions`, {
+          headers: {
+            Authorization: `Bearer ${props.token}`,
+          },
+        })
+      : await fetch(`${process.env.REACT_APP_API_URL}/suggestions`);
     const suggestionsData = await rawData.json();
     setLoading(false);
     setSuggestions(suggestionsData);
@@ -58,3 +67,5 @@ export default function Home() {
     </div>
   );
 }
+
+export default connect(mapStateToProps)(Home);

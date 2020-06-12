@@ -53,7 +53,8 @@ const accountSlice = createSlice({
       state.username = action.payload.username;
       state.fullName = action.payload.fullName;
       state.token = action.payload.token;
-      if (action.payload.adminAccount) state.adminAccount = true;
+      if (action.payload.adminAccount)
+        state.adminAccount = action.payload.adminAccount;
       state.accountFormType = "logout";
     },
   },
@@ -63,7 +64,8 @@ const accountSlice = createSlice({
       state.username = action.payload.username;
       state.fullName = action.payload.fullName;
       state.token = action.payload.token;
-      if (action.payload.adminAccount) state.adminAccount = true;
+      if (action.payload.adminAccount)
+        state.adminAccount = action.payload.adminAccount;
     },
   },
 });

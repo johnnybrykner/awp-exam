@@ -34,8 +34,19 @@ function signToken(payload) {
   return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "1h" });
 }
 
-app.get("/api/suggestions", async (req, res) =>
-  res.json(await models.Suggestion.find({}))
+app.get(
+  "/api/suggestions",
+  validate({
+    secret: process.env.JWT_SECRET,
+    credentialsRequired: false,
+  }),
+  async (req, res) => {
+    if (req.user && req.user.adminAccount) {
+      res.json(await models.Suggestion.find({}));
+    } else {
+      res.json(await models.Suggestion.find({ visibility: true }));
+    }
+  }
 );
 
 app.post(
@@ -43,7 +54,7 @@ app.post(
   validate({
     secret: process.env.JWT_SECRET,
   }),
-  async function (req, res) {
+  async (req, res) => {
     try {
       const newSuggestion = new models.Suggestion({
         ...req.body,
@@ -58,27 +69,50 @@ app.post(
 );
 
 app.get("/api/suggestion/:id", async (req, res) => {
-  res.json(await models.Suggestion.findOne({ _id: req.params.id }));
+  res.json(await models.Suggestion.findById(req.params.id));
 });
+
+app.patch(
+  "/api/suggestion/:id",
+  validate({
+    secret: process.env.JWT_SECRET,
+  }),
+  async (req, res) => {
+    try {
+      let toBeUpdated = await models.Suggestion.findById(req.params.id);
+      toBeUpdated.signatures = req.body.signatures;
+      await toBeUpdated.save();
+    } catch (error) {
+      res.status(400).send({ error: "Suggestion update failed" });
+    }
+    res.json(await models.Suggestion.findById(req.params.id));
+  }
+);
 
 app.put(
   "/api/suggestion/:id",
   validate({
     secret: process.env.JWT_SECRET,
   }),
-  async function (req, res) {
-    try {
-      let toBeUpdated = await models.Suggestion.findByIdAndUpdate(
-        req.params.id,
-        {
-          ...req.body,
-        }
-      );
-      await toBeUpdated.save();
-    } catch (error) {
-      res.status(400).send({ error: "Suggestion update failed" });
+  async (req, res) => {
+    if (req.user && req.user.adminAccount) {
+      try {
+        let toBeUpdated = await models.Suggestion.findByIdAndUpdate(
+          req.params.id,
+          {
+            ...req.body,
+          }
+        );
+        await toBeUpdated.save();
+      } catch (error) {
+        res.status(400).send({ error: "Suggestion update failed" });
+      }
+    } else {
+      res
+        .status(401)
+        .send({ error: "Only admin accounts can perform this action" });
     }
-    res.json(await models.Suggestion.findOne({ _id: req.params.id }));
+    res.json(await models.Suggestion.findById(req.params.id));
   }
 );
 
@@ -88,8 +122,8 @@ app.post("/api/register", async (req, res) => {
   if (dbMatch) {
     res.status(400).send({ error: "User already exists" });
   } else {
-    bcrypt.genSalt(10, function (error, salt) {
-      bcrypt.hash(password, salt, async function (error, hash) {
+    bcrypt.genSalt(10, (error, salt) => {
+      bcrypt.hash(password, salt, async (error, hash) => {
         const newUser = new models.User({
           ...req.body,
           password: hash,
@@ -113,7 +147,7 @@ app.get(
   validate({
     secret: process.env.JWT_SECRET,
   }),
-  function (req, res) {
+  (req, res) => {
     if (req.user.username && req.user.fullName) {
       res.json(req.user);
     } else {
@@ -128,7 +162,7 @@ app.post("/api/login", async (req, res) => {
   const { username, password } = req.body;
   const dbMatch = await models.User.findOne({ username });
   if (dbMatch) {
-    bcrypt.compare(password, dbMatch.password, function (error, valid) {
+    bcrypt.compare(password, dbMatch.password, (error, valid) => {
       if (valid)
         res.json({
           message: `Welcome back, ${username}!`,

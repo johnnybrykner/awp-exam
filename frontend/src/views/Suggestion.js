@@ -30,19 +30,19 @@ function Suggestion(props) {
 
   async function toggleSignature() {
     if (!props.loggedIn) return;
-    let updated = suggestionData;
-    const alreadySigned = updated.signatures.findIndex(
+    let updated = suggestionData.signatures;
+    const alreadySigned = updated.findIndex(
       (signature) => signature.username === props.username
     );
     if (alreadySigned > -1) {
-      updated.signatures.splice(alreadySigned, 1);
+      updated.splice(alreadySigned, 1);
     } else {
       const newSignature = {
         username: props.username,
         fullName: props.fullName,
         date: moment().format("DD MMM YYYY, HH:mm"),
       };
-      updated.signatures.push(newSignature);
+      updated.unshift(newSignature);
     }
     const rawData = await fetch(
       `${process.env.REACT_APP_API_URL}/suggestion/${props.suggestionId}`,
@@ -51,8 +51,8 @@ function Suggestion(props) {
           "Content-Type": "application/json",
           Authorization: `Bearer ${props.token}`,
         },
-        method: "PUT",
-        body: JSON.stringify(updated),
+        method: "PATCH",
+        body: JSON.stringify({ signatures: updated }),
       }
     );
     const updatedSuggestion = await rawData.json();

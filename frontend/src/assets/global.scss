@@ -51,8 +51,9 @@ img {
   background-color: lightgreen;
 }
 
-.hidden {
-  opacity: 0.5;
+.opaque {
+  opacity: 0.25;
+  transition: opacity 0.3s;
 
   &:hover {
     opacity: 1;
