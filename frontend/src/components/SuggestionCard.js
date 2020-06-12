@@ -1,30 +1,85 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./SuggestionCard.module.scss";
 import { connect } from "react-redux";
 
 const mapStateToProps = (state) => state.userStore;
 
 function SuggestionCard(props) {
-  function toggleVisibility(event) {
-    event.preventDefault();
+  const [originalState, setOriginalState] = useState({
+    visibility: props.suggestionData.visibility,
+    title: props.suggestionData.title,
+    description: props.suggestionData.description,
+  });
+
+  const [visibility, setVisibility] = useState(props.suggestionData.visibility);
+
+  const [title, setTitle] = useState(props.suggestionData.title);
+
+  const [description, setDescription] = useState(
+    props.suggestionData.description
+  );
+
+  const [hasStateChanged, stateChange] = useState(false);
+
+  function toggleVisibility() {
+    setVisibility(!visibility);
+    stateChange(true);
+  }
+
+  function changeTitle() {}
+
+  function changeDescription() {}
+
+  function submitChanges() {
+    console.log("Submit!");
+    stateChange(false);
+    setOriginalState({
+      visibility,
+      title,
+      description,
+    });
   }
 
   return (
-    <div className={styles.suggestion__container + " fancy"}>
-      <div className={styles.suggestion__header}>
-        {props.loggedIn && props.adminAccount && (
+    <div
+      className={
+        visibility
+          ? styles.suggestion__container + " fancy"
+          : styles.suggestion__container + " fancy hidden"
+      }
+    >
+      {props.loggedIn && props.adminAccount && props.showAdminActions && (
+        <div
+          className={styles.suggestion__admin}
+          onClick={(event) => event.preventDefault()}
+        >
           <div
-            className={styles.suggestion__visibility}
-            onClick={(event) => toggleVisibility(event)}
+            className={
+              visibility === originalState.visibility
+                ? styles.suggestion__visibility
+                : styles.suggestion__visibility + " altered"
+            }
+            onClick={() => toggleVisibility()}
           >
-            <span>Suggestion visible:</span>
-            <input
-              type="checkbox"
-              name="visibility"
-              checked={props.suggestionData.visibility}
-            />
+            <span>
+              {visibility ? "Suggestion visible" : "Suggestion invisible"}
+            </span>
+            <span className="material-icons">
+              {visibility ? "visibility" : "visibility_off"}
+            </span>
           </div>
-        )}
+          {hasStateChanged && (
+            <div
+              className={styles.confirm__changes}
+              onClick={() => submitChanges()}
+            >
+              <span>Confirm changes</span>
+              <span className="material-icons">done</span>
+            </div>
+          )}
+        </div>
+      )}
+      <div className={styles.suggestion__header}>
         <div className={styles.suggestion__icons}>
           <section>
             <span className="material-icons">account_circle</span>
@@ -40,11 +95,25 @@ function SuggestionCard(props) {
           </section>
         </div>
       </div>
-      <h2 className={styles.suggestion__title}>{props.suggestionData.title}</h2>
-      <p className={styles.suggestion__description}>
-        {props.suggestionData.description}
+      <h2
+        className={
+          title === originalState.title
+            ? styles.suggestion__title
+            : styles.suggestion__title + " altered"
+        }
+      >
+        {title}
+      </h2>
+      <p
+        className={
+          description === originalState.description
+            ? styles.suggestion__description
+            : styles.suggestion__description + " altered"
+        }
+      >
+        {description}
       </p>
-      <span className={styles.suggestion_signatures}>
+      <span className={styles.suggestion__signatures}>
         {props.suggestionData.signatures &&
         props.suggestionData.signatures.length
           ? `${props.suggestionData.signatures.length} signature(s) supporting this suggestion`

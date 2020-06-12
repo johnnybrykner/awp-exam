@@ -5,40 +5,46 @@
   flex-flow: column nowrap;
   align-items: center;
 
+  .suggestion__admin {
+    margin-top: -1rem;
+    margin-bottom: 1rem;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    opacity: 0.5;
+    transition: opacity 0.3s;
+    padding: 1rem;
+
+    &:hover {
+      opacity: 1;
+    }
+
+    span {
+      font-size: 0.75rem;
+      margin-left: 0.25rem;
+    }
+
+    .suggestion__visibility {
+      display: flex;
+      align-items: center;
+      align-self: flex-end;
+    }
+
+    .confirm__changes {
+      display: flex;
+      align-items: center;
+    }
+
+    @media (min-width: 575px) {
+      margin-top: -2rem;
+    }
+  }
+
   .suggestion__header {
     display: flex;
     flex-flow: column nowrap;
     width: 100%;
-
-    .suggestion__visibility {
-      opacity: 0.5;
-      display: flex;
-      align-items: center;
-      margin-top: 0rem;
-      position: relative;
-      bottom: 1rem;
-      left: 1rem;
-      align-self: flex-end;
-      transition: opacity 0.3s;
-      padding: 0.5rem;
-
-      &:hover {
-        opacity: 1;
-      }
-
-      span {
-        font-size: 0.75rem;
-      }
-
-      input[type="checkbox"] {
-        margin-left: 0.5rem;
-      }
-
-      @media (min-width: 575px) {
-        margin-top: -1.5rem;
-        left: 2.5rem;
-      }
-    }
 
     .suggestion__icons {
       display: flex;
@@ -48,6 +54,7 @@
       section {
         display: flex;
         align-items: center;
+        max-width: 50%;
 
         &:last-of-type {
           justify-content: flex-end;
@@ -62,7 +69,7 @@
     }
   }
 
-  .suggestion_signatures {
+  .suggestion__signatures {
     font-size: 0.75rem;
     font-weight: bold;
   }

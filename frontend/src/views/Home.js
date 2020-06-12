@@ -28,7 +28,7 @@ export default function Home() {
       {suggestions.length ? (
         suggestions.map((suggestion) => (
           <Link key={suggestion._id} to={`/suggestion/${suggestion._id}`}>
-            <SuggestionCard suggestionData={suggestion} />
+            <SuggestionCard showAdminActions suggestionData={suggestion} />
           </Link>
         ))
       ) : loading ? (
