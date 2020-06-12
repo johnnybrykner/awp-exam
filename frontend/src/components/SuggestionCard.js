@@ -21,6 +21,8 @@ function SuggestionCard(props) {
   );
   const [editingDescription, toggleDescriptionEditing] = useState(false);
 
+  const [deleting, toggleDeleting] = useState(false);
+
   const [hasStateChanged, stateChange] = useState(false);
 
   function toggleVisibility() {
@@ -40,6 +42,19 @@ function SuggestionCard(props) {
     toggleDescriptionEditing(!editingDescription);
   }
 
+  async function deleteSuggestion() {
+    await fetch(
+      `${process.env.REACT_APP_API_URL}/suggestion/${props.suggestionData._id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${props.token}`,
+        },
+        method: "DELETE",
+      }
+    );
+    props.requestDataRefresh();
+  }
+
   async function submitChanges() {
     stateChange(false);
     setOriginalState({
@@ -47,7 +62,7 @@ function SuggestionCard(props) {
       title,
       description,
     });
-    const rawData = await fetch(
+    await fetch(
       `${process.env.REACT_APP_API_URL}/suggestion/${props.suggestionData._id}`,
       {
         headers: {
@@ -62,8 +77,6 @@ function SuggestionCard(props) {
         }),
       }
     );
-    const updatedSuggestion = await rawData.json();
-    console.log(updatedSuggestion);
   }
 
   return (
@@ -212,6 +225,44 @@ function SuggestionCard(props) {
           ? `${props.suggestionData.signatures.length} signature(s) supporting this suggestion`
           : "There are no signatures"}
       </span>
+      {props.loggedIn &&
+        props.adminAccount &&
+        props.showAdminActions &&
+        (deleting ? (
+          <div className={styles.delete__confirm}>
+            <span className={styles.delete__heading}>Are you sure?</span>
+            <div className={styles.delete__icons}>
+              <span
+                className="material-icons"
+                onClick={(event) => {
+                  event.preventDefault();
+                  deleteSuggestion();
+                }}
+              >
+                done
+              </span>
+              <span
+                className="material-icons"
+                onClick={(event) => {
+                  event.preventDefault();
+                  toggleDeleting(false);
+                }}
+              >
+                close
+              </span>
+            </div>
+          </div>
+        ) : (
+          <span
+            className={styles.suggestion__delete + " material-icons"}
+            onClick={(event) => {
+              event.preventDefault();
+              toggleDeleting(true);
+            }}
+          >
+            delete
+          </span>
+        ))}
     </div>
   );
 }

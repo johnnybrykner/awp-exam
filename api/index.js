@@ -82,10 +82,10 @@ app.patch(
       let toBeUpdated = await models.Suggestion.findById(req.params.id);
       toBeUpdated.signatures = req.body.signatures;
       await toBeUpdated.save();
+      res.json(await models.Suggestion.findById(req.params.id));
     } catch (error) {
       res.status(400).send({ error: "Suggestion update failed" });
     }
-    res.json(await models.Suggestion.findById(req.params.id));
   }
 );
 
@@ -95,8 +95,8 @@ app.put(
     secret: process.env.JWT_SECRET,
   }),
   async (req, res) => {
-    if (req.user && req.user.adminAccount) {
-      try {
+    try {
+      if (req.user && req.user.adminAccount) {
         let toBeUpdated = await models.Suggestion.findByIdAndUpdate(
           req.params.id,
           {
@@ -104,15 +104,32 @@ app.put(
           }
         );
         await toBeUpdated.save();
-      } catch (error) {
-        res.status(400).send({ error: "Suggestion update failed" });
+        res.json(await models.Suggestion.findById(req.params.id));
+      } else {
+        throw { error: "Only admin accounts can perform this action" };
       }
-    } else {
-      res
-        .status(401)
-        .send({ error: "Only admin accounts can perform this action" });
+    } catch (error) {
+      res.status(401).send(error);
     }
-    res.json(await models.Suggestion.findById(req.params.id));
+  }
+);
+
+app.delete(
+  "/api/suggestion/:id",
+  validate({
+    secret: process.env.JWT_SECRET,
+  }),
+  async (req, res) => {
+    try {
+      if (req.user && req.user.adminAccount) {
+        await models.Suggestion.deleteOne({ _id: req.params.id });
+        res.json({ message: "Suggestion successfully deleted" });
+      } else {
+        throw { error: "Only admin accounts can perform this action" };
+      }
+    } catch (error) {
+      res.status(401).send(error);
+    }
   }
 );
 

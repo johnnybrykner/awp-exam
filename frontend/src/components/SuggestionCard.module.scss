@@ -96,4 +96,47 @@
     font-size: 0.75rem;
     font-weight: bold;
   }
+
+  .delete__confirm {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    margin-bottom: -20px;
+    margin-top: 1rem;
+    align-self: end;
+    padding-bottom: 1rem;
+
+    .delete__heading {
+      font-size: 0.75rem;
+    }
+
+    .delete__icons {
+      display: flex;
+      width: 100%;
+      padding-top: 0.5rem;
+      justify-content: space-between;
+
+      span {
+        transition: transform 0.3s;
+
+        &:hover {
+          transform: scale(1.2);
+        }
+      }
+    }
+
+    @media (min-width: 575px) {
+      padding-bottom: 0;
+    }
+  }
+
+  .suggestion__delete {
+    align-self: flex-end;
+    margin-top: 1rem;
+    transition: transform 0.3s;
+
+    &:hover {
+      transform: scale(1.2);
+    }
+  }
 }

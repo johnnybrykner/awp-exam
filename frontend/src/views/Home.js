@@ -37,7 +37,11 @@ function Home(props) {
       {suggestions.length ? (
         suggestions.map((suggestion) => (
           <Link key={suggestion._id} to={`/suggestion/${suggestion._id}`}>
-            <SuggestionCard showAdminActions suggestionData={suggestion} />
+            <SuggestionCard
+              showAdminActions
+              suggestionData={suggestion}
+              requestDataRefresh={() => fetchData()}
+            />
           </Link>
         ))
       ) : loading ? (
